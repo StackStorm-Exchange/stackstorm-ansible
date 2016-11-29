@@ -1,0 +1,26 @@
+machine:
+  services:
+    - rabbitmq-server
+
+checkout:
+  post:
+    - git clone -b master git@github.com:stackstorm-exchange/ci.git ~/ci
+
+dependencies:
+  cache_directories:
+    - ~/.cache/pip
+    - ~/.pip-cache
+    - ~/.apt-cache
+  override:
+    - ~/ci/.circle/dependencies
+
+test:
+  override:
+    - ~/ci/.circle/test
+
+deployment:
+  index:
+    branch: master
+    owner: StackStorm-Exchange
+    commands:
+      - ~/ci/.circle/deployment
