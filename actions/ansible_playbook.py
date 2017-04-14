@@ -36,5 +36,9 @@ class AnsiblePlaybookRunner(AnsibleBaseRunner):
         '--vault_password_file': '--vault-password-file',
     }
 
+    def __init__(self, *args, **kawrgs):
+        super(AnsiblePlaybookRunner, self).__init__(*args, **kawrgs)
+
+
 if __name__ == '__main__':
     AnsiblePlaybookRunner(sys.argv).execute()

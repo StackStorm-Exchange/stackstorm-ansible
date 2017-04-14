@@ -21,6 +21,13 @@ class AnsibleBaseRunner(object):
         :type args: ``list``
         """
         self.args = args[1:]
+        for i, arg in enumerate(self.args):
+            if '--extra_vars' in arg:
+                for var in arg.split("--extra_vars=")[1].split(','):
+                    self.args.append("-e {0}".format(var))
+                del self.args[i]
+                break
+        print('Args after extra-vars: %s' % self.args)
         self._prepend_venv_path()
 
     @staticmethod
@@ -41,6 +48,8 @@ class AnsibleBaseRunner(object):
         from child process as it appears without delay.
         Terminate with child's exit code.
         """
+        print('Cmd to execute: %s' % self.cmd)
+        return 0
         exit_code = subprocess.call(self.cmd, env=os.environ.copy())
         if exit_code is not 0:
             sys.stderr.write('Executed command "%s"\n' % ' '.join(self.cmd))
