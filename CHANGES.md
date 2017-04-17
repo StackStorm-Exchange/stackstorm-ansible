@@ -1,5 +1,21 @@
 # Changelog
 
+## v0.4
+
+* Added ability to pass in multiple extra_vars. The extra_vars parameter is now a list. Example usage:
+```
+sample_task:
+  action: ansible.playbook
+  input:
+    playbook: playbook.yml
+    extra_vars: 
+      - "@path/to/file.yml"
+      - "@path/to/file.json"
+      - "key1=value1"
+      - "key2={{ _.value2 }}"
+        ...
+```
+
 ## v0.3
 
 * Removed immutable flag for `sudo:` parameters for all actions. Default is `true`, which means that ansible commands are run with sudo (as root). Good thing is you can change it to `false` when required.
