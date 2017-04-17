@@ -2,6 +2,7 @@ import os
 import sys
 import subprocess
 import shell
+import ast
 
 __all__ = [
     'AnsibleBaseRunner'
@@ -21,6 +22,20 @@ class AnsibleBaseRunner(object):
         :type args: ``list``
         """
         self.args = args[1:]
+
+        # handle multiple variables in extra_vars list
+        for i, arg in enumerate(self.args):
+            if '--extra_vars' in arg:
+                # We are passed a literal string of "--extra_vars=[...]". Pull the list of vars out as an actual list:
+                var_list_str = arg.split("--extra_vars=")[1]
+                var_list = ast.literal_eval(var_list_str)
+                var_list = [n.strip() for n in var_list]
+                # Multiple extra_vars are passed to ansible using multiple --extra-vars arguments. Add one for each arg in our list:
+                for v in var_list:
+                    self.args.append("--extra-vars={0}".format(v))
+                del self.args[i]  # Delete the original arg since we split it into separate ones
+                break
+
         self._prepend_venv_path()
 
     @staticmethod

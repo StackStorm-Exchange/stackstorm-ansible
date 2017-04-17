@@ -21,7 +21,6 @@ class AnsiblePlaybookRunner(AnsibleBaseRunner):
         '--verbose=v': '-v',
         '--become_method': '--become-method',
         '--become_user': '--become-user',
-        '--extra_vars': '--extra-vars',
         '--flush_cache': '--flush-cache',
         '--force_handlers': '--force-handlers',
         '--inventory_file': '--inventory-file',
@@ -35,6 +34,9 @@ class AnsiblePlaybookRunner(AnsibleBaseRunner):
         '--syntax_check': '--syntax-check',
         '--vault_password_file': '--vault-password-file',
     }
+
+    def __init__(self, *args, **kwargs):
+        super(AnsiblePlaybookRunner, self).__init__(*args, **kwargs)
 
 if __name__ == '__main__':
     AnsiblePlaybookRunner(sys.argv).execute()

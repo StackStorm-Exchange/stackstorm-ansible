@@ -16,6 +16,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!/actions/lib/
 lib64/
 parts/
 sdist/
@@ -87,3 +88,7 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+# Jetbrains
+*.iml
+.idea/

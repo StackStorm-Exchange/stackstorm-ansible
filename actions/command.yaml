@@ -53,8 +53,8 @@ parameters:
     description: "Connection type to use (default=smart) [-c]"
     type: string
   extra_vars:
-    description: "Set additional variables as key=value or YAML/JSON [-e]"
-    type: string
+    description: "List of additional variables to pass to ansible. Each variable is represented as '- key=value' or '- @path/to/file.yaml|json' [-e]."
+    type: array
   forks:
     description: "Specify number of parallel processes to use (default=5) [-f]"
     type: integer
