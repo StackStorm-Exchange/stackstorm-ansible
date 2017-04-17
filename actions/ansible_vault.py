@@ -18,5 +18,8 @@ class AnsibleVaultRunner(AnsibleBaseRunner):
         '--vault_password_file': '--vault-password-file'
     }
 
+    def __init__(self, *args, **kwargs):
+        super(AnsibleVaultRunner, self).__init__(*args, **kwargs)
+
 if __name__ == '__main__':
     AnsibleVaultRunner(sys.argv).execute()

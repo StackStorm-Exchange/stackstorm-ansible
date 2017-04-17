@@ -21,5 +21,8 @@ class AnsibleGalaxyRunner(AnsibleBaseRunner):
         '--role_file': '--role-file',
     }
 
+    def __init__(self, *args, **kwargs):
+        super(AnsibleGalaxyRunner, self).__init__(*args, **kwargs)
+
 if __name__ == '__main__':
     AnsibleGalaxyRunner(sys.argv).execute()
