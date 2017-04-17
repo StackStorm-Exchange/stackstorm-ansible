@@ -22,23 +22,30 @@ class AnsibleBaseRunner(object):
         :type args: ``list``
         """
         self.args = args[1:]
+        self._parse_extra_vars()  # handle multiple entries in --extra_vars arg
+        self._prepend_venv_path()
 
-        # handle multiple variables in extra_vars list
+    def _parse_extra_vars(self):
+        """
+        Multiple extra_vars are passed to Ansible using multiple --extra-vars kwargs.
+        This method turns the string list ("--extra_vars=[...]") passed in from the args 
+        into an actual list and adds new --extra-vars kwargs for each entry.
+        
+        Example:
+          Input from args:
+            "--extra_vars=[u'"@path/to/vars_file.yml"', u'"key1=value1"']"
+          Passed to Ansible after transformation:
+            --extra-vars="@path/to/vars_file.yml" --extra-vars="key1=value1"
+        """
         for i, arg in enumerate(self.args):
             if '--extra_vars' in arg:
-                # We are passed a literal string of "--extra_vars=[...]"
-                # Pull the list of vars out as an actual list:
                 var_list_str = arg.split("--extra_vars=")[1]
                 var_list = ast.literal_eval(var_list_str)
                 var_list = [n.strip() for n in var_list]
-                # Multiple extra_vars are passed to ansible using multiple --extra-vars arguments.
-                # Add one for each arg in our list:
                 for v in var_list:
                     self.args.append("--extra-vars={0}".format(v))
                 del self.args[i]  # Delete the original arg since we split it into separate ones
                 break
-
-        self._prepend_venv_path()
 
     @staticmethod
     def _prepend_venv_path():
