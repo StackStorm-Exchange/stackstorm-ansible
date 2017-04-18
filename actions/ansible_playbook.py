@@ -38,5 +38,6 @@ class AnsiblePlaybookRunner(AnsibleBaseRunner):
     def __init__(self, *args, **kwargs):
         super(AnsiblePlaybookRunner, self).__init__(*args, **kwargs)
 
+
 if __name__ == '__main__':
     AnsiblePlaybookRunner(sys.argv).execute()
