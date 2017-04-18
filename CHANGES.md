@@ -2,7 +2,7 @@
 
 ## v0.4
 
-* Added ability to pass in multiple extra_vars. The extra_vars parameter is now a list. Example usage:
+* Breaking Change: Added ability to pass in multiple extra_vars. The extra_vars parameter is now a list. Example usage:
 ```
 sample_task:
   action: ansible.playbook
@@ -11,8 +11,8 @@ sample_task:
     extra_vars: 
       - "@path/to/file.yml"
       - "@path/to/file.json"
-      - "key1=value1"
-      - "key2={{ _.value2 }}"
+      - key1=value1
+      - key2={{ _.value2 }}
         ...
 ```
 
