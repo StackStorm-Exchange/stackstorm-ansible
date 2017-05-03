@@ -22,7 +22,6 @@ class AnsibleRunner(AnsibleBaseRunner):
         '--verbose=v': '-v',
         '--become_method': '--become-method',
         '--become_user': '--become-user',
-        '--extra_vars': '--extra-vars',
         '--inventory_file': '--inventory-file',
         '--list_hosts': '--list-hosts',
         '--module_path': '--module-path',
@@ -31,6 +30,10 @@ class AnsibleRunner(AnsibleBaseRunner):
         '--private_key': '--private-key',
         '--vault_password_file': '--vault-password-file',
     }
+
+    def __init__(self, *args, **kwargs):
+        super(AnsibleRunner, self).__init__(*args, **kwargs)
+
 
 if __name__ == '__main__':
     AnsibleRunner(sys.argv).execute()
