@@ -9,7 +9,6 @@ checkout:
 dependencies:
   cache_directories:
     - ~/.cache/pip
-    - ~/.pip-cache
     - ~/.apt-cache
   override:
     - ~/ci/.circle/dependencies
