@@ -53,7 +53,7 @@ parameters:
     description: "when changing (small) files and templates, show the differences in those files; works great with --check [-D]"
     type: boolean
   extra_vars:
-    description: "List of additional variables to pass to ansible. Each variable is represented as \"key=value\" or \"@path/to/file.yaml|json\" [-e]."
+    description: "List of additional variables to pass to ansible. Each variable is represented as \"key=value\" or \"@path/to/file.yaml|json\" or use a yaml dict (\"key: [1, 2, 3]\") to send JSON. [-e]"
     type: array
   flush_cache:
     description: "Clear the fact cache"
