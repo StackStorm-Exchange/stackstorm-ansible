@@ -3,7 +3,7 @@
 ## v0.5.0
 
 * Added ability to use yaml structures to pass arbitrarily complex values through extra_vars. key=value and @file syntax is still supported. Example usage:
-```
+```yaml
 sample_task:
   action: ansible.playbook
   input:
@@ -26,7 +26,7 @@ sample_task:
 ## v0.4
 
 * Breaking Change: Added ability to pass in multiple extra_vars. The extra_vars parameter is now a list. Example usage:
-```
+```yaml
 sample_task:
   action: ansible.playbook
   input:
