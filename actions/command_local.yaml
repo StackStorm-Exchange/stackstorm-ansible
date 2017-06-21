@@ -105,3 +105,6 @@ parameters:
   version:
     description: "Show ansible version number and exit"
     type: boolean
+  json:
+    description: "Clean up Ansible's output to ensure it is valid jSON"
+    type: boolean

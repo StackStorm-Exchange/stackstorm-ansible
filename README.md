@@ -34,6 +34,52 @@ ansible all -c local -i '127.0.0.1,' -a 'echo $TERM'
 ansible all --connection=local --inventory-file='127.0.0.1,' --args='echo $TERM'
 ```
 
+##### structured output from `ansible.command` and `ansible.command_local`:
+
+To get a JSON object back from `ansible.command*`, set the json parameter to True. This uses ansible's `--tree` output to generate a JSON object with one element per node: `{"node-name": node-ouput}`
+
+
+```
+$ st2 run ansible.command_local become=true module_name=setup json=True
+.
+id: 594d6657c4da5f08e9ec7c51
+status: succeeded
+parameters:
+  become: true
+  json: true
+  module_name: setup
+result:
+  failed: false
+  return_code: 0
+  stderr: ''
+  stdout:
+    127.0.0.1:
+      ansible_facts:
+        ansible_all_ipv4_addresses:
+      ...
+      changed: false
+  succeeded: true
+```
+
+With this structured output, you could use the setup module as the first step of a workflow, and then base additional workflow steps on variables from ansible's setup. It should work similarly for other modules.
+
+For instance, if you needed the default ipv4 address of a node, you could publish the appropriate ansible_fact like this (in an action-chain workflow):
+
+```yaml
+chain:
+  -
+    name: ansible_setup
+    ref:  ansible.command_local
+    parameters:
+      become: True
+      json: True
+      module_name: setup
+    publish:
+      default_ip: "{{ ansible_setup.stdout['127.0.0.1'].ansible_facts.ansible_default_ipv4.address }}"
+```
+
+
+
 #### `ansible.playbook` examples
 ```sh
 # run some simple playbook
