@@ -42,6 +42,36 @@ st2 run ansible.playbook playbook=/etc/ansible/playbooks/nginx.yml
 # run playbook on last machine listed in inventory file
 st2 run ansible.playbook playbook=/etc/ansible/playbooks/nginx.yml limit='all[-1]'
 ```
+
+This is an example from a workflow that passes several several different
+variables to the playbook as extra-vars:
+
+```yaml
+sample_task:
+  action: ansible.playbook
+  input:
+    playbook: /path/to/playbook.yml
+    extra_vars:
+      #
+      # as key=value pairs
+      - key1=value1
+      - key2=value2
+      #
+      # variables from a yaml (or json) file
+      - '@/path/to/file.yml'
+      #
+      # an arbitrarily complex dict of variables (passed as JSON to ansible)
+      -
+        key3: "{{ value3 }}"
+        key4: [ value4a, value4b ]
+        key5:
+          - value5a
+          - { value5bkey: value5bvalue }
+        key6:
+          key7: value7
+          key8: value8
+```
+
 ##### Structured output
 ```sh
 # get structured JSON output from a playbook

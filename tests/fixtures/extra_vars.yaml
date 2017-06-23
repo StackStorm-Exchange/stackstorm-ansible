@@ -1,0 +1,35 @@
+-
+  name: key_value
+  test:
+    - 'key1=value1'
+    - 'key2=value2'
+  expected:
+    - 'key1=value1 key2=value2'
+-
+  name: at_file
+  test:
+    - '@path/to/vars.yaml'
+    - '@path/to/vars.json'
+  expected:
+    - '@path/to/vars.yaml'
+    - '@path/to/vars.json'
+-
+  name: key_value_and_at_file
+  test:
+    - '@path/to/vars.yaml'
+    - 'key1=value1'
+    - '@path/to/vars.json'
+    - 'key2=value2'
+    - 'key3=value3'
+  # before ordering
+#  expected:
+#    - '@path/to/vars.yaml'
+#    - '@path/to/vars.json'
+#    - 'key1=value1 key2=value2 key3=value3'
+  # after ordering
+  expected:
+    - '@path/to/vars.yaml'
+    - 'key1=value1'
+    - '@path/to/vars.json'
+    - 'key2=value2 key3=value3'
+

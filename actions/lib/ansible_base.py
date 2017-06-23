@@ -3,6 +3,8 @@ import sys
 import subprocess
 import shell
 import ast
+import json
+import six
 
 __all__ = [
     'AnsibleBaseRunner'
@@ -30,34 +32,53 @@ class AnsibleBaseRunner(object):
         This method turns the string list ("--extra_vars=[...]") passed in from the args
         into an actual list and adds new --extra-vars kwargs for file and k\v entries.
 
-        Example:
+        Example (line breaks added for readability):
           Input from args:
-            "--extra_vars=[u'"@path/to/vars_file.yml"', u'"key1=value1", u'"key2=value2"']"
+            "--extra_vars=[u'"@path/to/vars_file.yml"',
+                           u'"key1=value1", u'"key2=value2"',
+                           {u'"key3"': u'"value3"'}]"
           Passed to Ansible after transformation:
-            ... --extra-vars=@path/to/vars_file.yml --extra-vars=key1=value1 key2=value2 ...
+            ... --extra-vars=@path/to/vars_file.yml
+                --extra-vars=key1=value1 key2=value2
+                --extra-vars='{"key3": "value3"}'...
         """
         for i, arg in enumerate(self.args):
             if '--extra_vars' in arg:
                 var_list_str = arg.split("--extra_vars=")[1]
-                var_list = ast.literal_eval(var_list_str)
-                var_list = [n.strip() for n in var_list]
+                var_list = []
+                for n in ast.literal_eval(var_list_str):
+                    if isinstance(n, six.string_types):
+                        if n.strip().startswith("@"):
+                            var_list.append(('file', n.strip()))
+                        else:
+                            var_list.append(('kwarg', n.strip()))
+                    elif isinstance(n, dict):
+                        var_list.append(('json', n))
 
-                # Separate @file vars from kwarg vars
-                file_vars = list()
-                kwarg_vars = list()
-                for v in var_list:
-                    if "@" in v:
-                        file_vars.append(v)
-                    else:
-                        kwarg_vars.append(v)
+                last = ''
+                kv_param = ''
+                for t, v in var_list:
+                    # Add --extra-vars for each file
+                    if t == 'file':
+                        self.args.append("--extra-vars={0}".format(v))
 
-                # Add --extra-vars for each file
-                for v in file_vars:
-                    self.args.append("--extra-vars={0}".format(v))
+                    # Add --extra-vars for each json object
+                    elif t == 'json':
+                        self.args.append("--extra-vars='{0}'".format(json.dumps(v)))
 
-                # Combine kwarg vars into a single space-separated --extra-vars kwarg
-                if kwarg_vars:
-                    kv_param = "--extra-vars={0}".format(" ".join([v for v in kwarg_vars]))
+                    # Combine contiguous kwarg vars into a single space-separated --extra-vars kwarg
+                    elif t == 'kwarg' and last != t:
+                        kv_param = "--extra-vars={0}".format(v)
+                    elif t == 'kwarg':  # last == t
+                        kv_param += " {0}".format(v)
+
+                    if last == 'kwarg' and t != last:
+                        self.args.append(kv_param)
+                        kv_param = ""
+
+                    last = t
+
+                if kv_param:
                     self.args.append(kv_param)
 
                 del self.args[i]  # Delete the original arg since we split it into separate ones
