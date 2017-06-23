@@ -58,7 +58,7 @@ sample_task:
       # variables from a yaml (or json) file
       - '@/path/to/file.yml'
       #
-	  # an arbitrarily complex dict of variables (passed as JSON to ansible)
+      # an arbitrarily complex dict of variables (passed as JSON to ansible)
       -
         key3: "{{ value3 }}"
         key4: [ value4a, value4b ]
