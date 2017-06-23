@@ -45,10 +45,9 @@ class AnsibleBaseRunner(object):
         for i, arg in enumerate(self.args):
             if '--extra_vars' in arg:
                 var_list_str = arg.split("--extra_vars=")[1]
-                var_list_str = arg.split("--extra_vars=")[1]
                 var_list = []
                 for n in ast.literal_eval(var_list_str):
-                    if type(n) in six.string_types:
+                    if isinstance(n, six.string_types):
                         if n.strip().startswith("@"):
                             var_list.append(('file', n.strip()))
                         else:
@@ -57,6 +56,7 @@ class AnsibleBaseRunner(object):
                         var_list.append(('json', n))
 
                 last = ''
+                kv_param = ''
                 for t, v in var_list:
                     # Add --extra-vars for each file
                     if t == 'file':
@@ -77,6 +77,9 @@ class AnsibleBaseRunner(object):
                         kv_param = ""
 
                     last = t
+
+                if kv_param:
+                    self.args.append(kv_param)
 
                 del self.args[i]  # Delete the original arg since we split it into separate ones
                 break

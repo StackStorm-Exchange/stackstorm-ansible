@@ -56,7 +56,7 @@ sample_task:
       - key2=value2
       #
       # variables from a yaml (or json) file
-      - @/path/to/file.yml
+      - '@/path/to/file.yml'
       #
 	  # an arbitrarily complex dict of variables (passed as JSON to ansible)
       -

@@ -1,0 +1,28 @@
+-
+  name: arbitrarily_complex
+  test:
+    - 'key1=value1'
+    - 'key2=value2'
+    - '@/path/to/file.yml'
+    -
+      key3: 'value3'
+      key4: [ 'value4a', 'value4b' ]
+      key5:
+        - 'value5a'
+        - { value5bkey: 'value5bvalue', value5bkey2: [1,2,3] }
+      key6:
+        key7: 'value7'
+    - 'key8=value8'
+  expected:
+    - 'key1=value1 key2=value2'
+    - '@/path/to/file.yml'
+    -
+      key3: 'value3'
+      key4: [ 'value4a', 'value4b' ]
+      key5:
+        - 'value5a'
+        - { value5bkey: 'value5bvalue', value5bkey2: [1,2,3] }
+      key6:
+        key7: 'value7'
+    - 'key8=value8'
+
