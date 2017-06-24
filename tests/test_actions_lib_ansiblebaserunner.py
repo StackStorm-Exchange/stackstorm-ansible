@@ -121,3 +121,24 @@ class TestActionsLibAnsibleBaseRunner(BasePackResourceTestCase):
 
     def test_parse_extra_vars_complex_yaml_arbitrarily_complex(self):
         self.extra_vars_complex_yaml_fixture('arbitrarily_complex')
+
+    def test_parse_extra_vars_complex_yaml_ast_directive(self):
+        self.extra_vars_complex_yaml_fixture('ast_directive')
+
+    def test_parse_extra_vars_complex_yaml_json_directive(self):
+        self.extra_vars_complex_yaml_fixture('json_directive')
+
+    def test_parse_extra_vars_complex_yaml_sub_ast_directive(self):
+        self.extra_vars_complex_yaml_fixture('sub_ast_directive')
+
+    def test_parse_extra_vars_complex_yaml_sub_json_directive(self):
+        self.extra_vars_complex_yaml_fixture('sub_json_directive')
+
+    def test_parse_extra_vars_complex_yaml_int_directive(self):
+        self.extra_vars_complex_yaml_fixture('int_directive')
+
+    def test_parse_extra_vars_complex_yaml_multi_directives_ast_int(self):
+        self.extra_vars_complex_yaml_fixture('multi_directives_ast_int')
+
+    def test_parse_extra_vars_complex_yaml_multi_directives_json_int(self):
+        self.extra_vars_complex_yaml_fixture('multi_directives_json_int')

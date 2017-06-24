@@ -1,5 +1,22 @@
 # Changelog
 
+## v0.6.0
+
+* Add extra_vars parsing directives to get around difficulties with Jinja (which casts all
+  extra_vars as strings). When passing in an object via Jinja, all values become strings. To get
+  around this, add "!AST", "!JSON", or "!INT" directives in your action-chain yaml:
+
+```yaml
+chain:
+  name: 'example'
+  ref: 'ansible.command_local'
+  extra_parameters:
+    -
+      keyA: "!AST{{ jinja_variable_a }}"
+      keyB: "!JSON{{ jinja_variable_b | tojson }}"
+      keyC: "!INT{{ jinja_variable_c | int }}"
+```
+
 ## v0.5.0
 
 * Added ability to use yaml structures to pass arbitrarily complex values through extra_vars. key=value and @file syntax is still supported. Example usage:

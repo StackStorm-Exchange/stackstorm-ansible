@@ -1,10 +1,10 @@
-import os
-import sys
-import subprocess
-import shell
 import ast
 import json
+import os
+import shell
 import six
+import subprocess
+import sys
 
 __all__ = [
     'AnsibleBaseRunner'
@@ -26,6 +26,24 @@ class AnsibleBaseRunner(object):
         self.args = args[1:]
         self._parse_extra_vars()  # handle multiple entries in --extra_vars arg
         self._prepend_venv_path()
+
+    def _parse_extra_vars_directives(self, value):
+        if isinstance(value, six.string_types):
+            if value.strip().startswith("!AST"):
+                a = ast.literal_eval(value.strip()[4:])
+                return self._parse_extra_vars_directives(a)
+            elif value.strip().startswith("!JSON"):
+                j = json.loads(value.strip()[5:])
+                return self._parse_extra_vars_directives(j)
+            elif value.strip().startswith("!INT"):
+                return int(value.strip()[4:])
+            else:
+                return value
+        elif isinstance(value, dict):
+            return {k: self._parse_extra_vars_directives(v) for k, v in six.iteritems(value)}
+        elif isinstance(value, list):
+            return [self._parse_extra_vars_directives(item) for item in value]
+        return value
 
     def _parse_extra_vars(self):
         """
@@ -50,10 +68,14 @@ class AnsibleBaseRunner(object):
                     if isinstance(n, six.string_types):
                         if n.strip().startswith("@"):
                             var_list.append(('file', n.strip()))
+                        elif (n.strip().startswith("!AST") or
+                              n.strip().startswith("!JSON") or
+                              '=' not in n):
+                            var_list.append(('json', self._parse_extra_vars_directives(n)))
                         else:
                             var_list.append(('kwarg', n.strip()))
                     elif isinstance(n, dict):
-                        var_list.append(('json', n))
+                        var_list.append(('json', self._parse_extra_vars_directives(n)))
 
                 last = ''
                 kv_param = ''

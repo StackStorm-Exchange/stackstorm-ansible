@@ -25,4 +25,70 @@
       key6:
         key7: 'value7'
     - 'key8=value8'
+-
+  name: ast_directive
+  test:
+    - "!AST{u'key1': u'12345', u'key2': u'value2'}"
+  expected:
+    -
+      key1: '12345'
+      key2: 'value2'
+-
+  name: json_directive
+  test:
+    - '!JSON{"key1": "12345", "key2": "value2"}'
+  expected:
+    -
+      key1: '12345'
+      key2: 'value2'
+-
+  name: sub_ast_directive
+  test:
+    -
+      astkey: "!AST[{u'key1': u'12345', u'key2': u'value2'}]"
+  expected:
+    -
+      astkey:
+        -
+          key1: '12345'
+          key2: 'value2'
+-
+  name: sub_json_directive
+  test:
+    -
+      jsonkey: '!JSON[{"key1": "12345", "key2": "value2"}]'
+  expected:
+    -
+      jsonkey:
+        -
+          key1: '12345'
+          key2: 'value2'
+-
+  name: int_directive
+  test:
+    -
+      key1: "!INT12345"
+  expected:
+    -
+      key1: 12345
+-
+  name: multi_directives_ast_int
+  test:
+    -
+      astkey: "!AST[{u'intkey': u'!INT12345'}]"
+  expected:
+    -
+      astkey:
+        -
+          intkey: 12345
+-
+  name: multi_directives_json_int
+  test:
+    -
+      jsonkey: '!JSON[{"intkey": "!INT12345"}]'
+  expected:
+    -
+      jsonkey:
+        -
+          intkey: 12345
 
