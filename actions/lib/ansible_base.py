@@ -23,7 +23,11 @@ class AnsibleBaseRunner(object):
         :param args: Input command line arguments
         :type args: ``list``
         """
+        self.json_output = False
+        self.stdout = None
+
         self.args = args[1:]
+        self._json_output_arg()
         self._parse_extra_vars()  # handle multiple entries in --extra_vars arg
         self._prepend_venv_path()
 
@@ -64,7 +68,7 @@ class AnsibleBaseRunner(object):
 
                     # Add --extra-vars for each json object
                     elif t == 'json':
-                        self.args.append("--extra-vars='{0}'".format(json.dumps(v)))
+                        self.args.append("--extra-vars={0}".format(json.dumps(v)))
 
                     # Combine contiguous kwarg vars into a single space-separated --extra-vars kwarg
                     elif t == 'kwarg' and last != t:
@@ -96,16 +100,36 @@ class AnsibleBaseRunner(object):
 
         os.environ['PATH'] = ':'.join(new_path)
 
+    def _json_output_arg(self):
+        for i, arg in enumerate(self.args):
+            if '--json' in arg:
+                self.json_output = True
+                self.handle_json_arg()
+                # if ansible-playbook, add env arg
+                del self.args[i]  # The json arg is a ST2 specific addition & should not pass on.
+                break
+            elif '--one_line' in arg:
+                self.one_line = True
+
+    def handle_json_arg(self):
+        pass
+
     def execute(self):
         """
         Execute the command and stream stdout and stderr output
         from child process as it appears without delay.
         Terminate with child's exit code.
         """
-        exit_code = subprocess.call(self.cmd, env=os.environ.copy())
+        exit_code = subprocess.call(self.cmd, env=os.environ.copy(), stdout=self.stdout)
         if exit_code is not 0:
             sys.stderr.write('Executed command "%s"\n' % ' '.join(self.cmd))
+
+        self.post_execute()
+
         sys.exit(exit_code)
+
+    def post_execute(self):
+        pass
 
     @property
     @shell.replace_args('REPLACEMENT_RULES')
@@ -139,3 +163,7 @@ class AnsibleBaseRunner(object):
             sys.exit(1)
 
         return binary_path
+
+
+class ParamaterConflict(Exception):
+    pass
