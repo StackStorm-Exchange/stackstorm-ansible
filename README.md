@@ -99,6 +99,39 @@ There is, however, a bug that breaks the JSON when the playbook execution fails 
 }
 ```
 
+##### Windows Hosts
+
+Connecting to windows is possibe as of version `v0.5.2` of this pack.
+This is accomplished using ansible's [builtin windows support](http://docs.ansible.com/ansible/latest/intro_windows.html).
+
+Prior to executing a playbook on a Windows host, the host must be configured to
+accept WinRM connections. To accomplish this, execute the ansible [setup PowerShell script](https://github.com/ansible/ansible/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
+on every Windows host you connect to. We recommend performing this on your
+Windows VM templates.
+
+The following `extra_vars` must be passed in when executing a playbook on a Windows host:
+
+* `ansible_user` : User to connect as (prefer user@domain.tld over domain\user)
+* `ansible_password` : Password to use when connecting
+* `ansible_connection` : Connection method to use (`winrm` for windows)
+* `ansible_port` : Port to use for the connection (`5986` for WinRM)
+* `ansible_winrm_transport` : WinRM transport to use for the connection (suggested: `ntlm` or `credssp`, for more information consult the [pywinrm documentation](https://github.com/diyan/pywinrm/).
+* `ansible_winrm_server_cert_validation` : Should the SSL cert be validated. (suggested: `ignore`)
+
+
+Connecting via NTLM using a `user@domain.tld` style login:
+
+``` sh
+st2 run ansible.playbook playbook=/etc/ansible/playbooks/windows_playbook.yaml inventory_file="winvm01.domain.tld," extra_vars='["ansible_user=user@domain.tld","ansible_password=xxx","ansible_port=5986","ansible_connection=winrm","ansible_winrm_server_cert_validation=ignore","ansible_winrm_transport=ntlm"]'
+```
+
+Connecting via CredSSP using a `DOMAIN\user` style login (note the extra `\`):
+
+``` sh
+st2 run ansible.playbook playbook=/etc/ansible/playbooks/windows_playbook.yaml inventory_file="winvm01.domain.tld," extra_vars='["ansible_user=DOMAIN\\\\user","ansible_password=xxx","ansible_port=5986","ansible_connection=winrm","ansible_winrm_server_cert_validation=ignore","ansible_winrm_transport=credssp"]'
+```
+
+
 #### `ansible.vault` examples
 ```sh
 # encrypt /tmp/nginx.yml playbook with password containing in vault.txt

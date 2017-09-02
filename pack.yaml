@@ -6,6 +6,6 @@ keywords:
   - ansible
   - cfg management
   - configuration management
-version : 0.5.1
+version : 0.5.2
 author : StackStorm, Inc.
 email : info@stackstorm.com

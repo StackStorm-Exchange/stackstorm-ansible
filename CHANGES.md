@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.2
+
+* Added pywinrm to requirements so connection to windows hosts is possible.
+  Contributed by Nick Maludy (Encore Technologies)
+
 ## v0.5.0
 
 * Added ability to use yaml structures to pass arbitrarily complex values through extra_vars. key=value and @file syntax is still supported. Example usage:
