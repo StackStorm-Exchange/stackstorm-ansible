@@ -4,6 +4,17 @@
 This pack provides [Ansible](http://www.ansible.com/) integration to perform remote operations on both local and remote machines.
 After [pack installation](http://docs.stackstorm.com/packs.html#getting-a-pack) all ansible executable files are available in pack virtualenv and ready to use.
 
+## Requirements
+This pack installs Ansible from `pip` and therefore may require some OS-level packages to be in place.
+Ubuntu:
+```
+sudo apt-get install gcc libkrb5-dev
+```
+RHEL/CentOS:
+```
+sudo yum install gcc krb5-devel
+```
+
 ## Actions
 * `command` - Run single [Ad-Hoc command](http://docs.ansible.com/intro_adhoc.html). It has all the regular parameters of `ansible` executable.
 * `command_local` - Perform single ansible Ad-Hoc command (module) locally.
