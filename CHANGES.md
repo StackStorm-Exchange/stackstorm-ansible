@@ -10,7 +10,7 @@
 chain:
   name: 'example'
   ref: 'ansible.command_local'
-  extra_parameters:
+  extra_vars:
     -
       keyA: "!AST{{ jinja_variable_a }}"
       keyB: "!JSON{{ jinja_variable_b | tojson }}"
