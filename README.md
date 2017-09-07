@@ -4,6 +4,17 @@
 This pack provides [Ansible](http://www.ansible.com/) integration to perform remote operations on both local and remote machines.
 After [pack installation](http://docs.stackstorm.com/packs.html#getting-a-pack) all ansible executable files are available in pack virtualenv and ready to use.
 
+## Requirements
+This pack installs Ansible from `pip` and therefore may require some OS-level packages to be in place.
+Ubuntu:
+```
+sudo apt-get install gcc libkrb5-dev
+```
+RHEL/CentOS:
+```
+sudo yum install gcc krb5-devel
+```
+
 ## Actions
 * `command` - Run single [Ad-Hoc command](http://docs.ansible.com/intro_adhoc.html). It has all the regular parameters of `ansible` executable.
 * `command_local` - Perform single ansible Ad-Hoc command (module) locally.
@@ -145,6 +156,39 @@ There is, however, a bug that breaks the JSON when the playbook execution fails 
             ...
 }
 ```
+
+##### Windows Hosts
+
+Connecting to windows is possibe as of version `v0.5.2` of this pack.
+This is accomplished using ansible's [builtin windows support](http://docs.ansible.com/ansible/latest/intro_windows.html).
+
+Prior to executing a playbook on a Windows host, the host must be configured to
+accept WinRM connections. To accomplish this, execute the ansible [setup PowerShell script](https://github.com/ansible/ansible/blob/devel/examples/scripts/ConfigureRemotingForAnsible.ps1)
+on every Windows host you connect to. We recommend performing this on your
+Windows VM templates.
+
+The following `extra_vars` must be passed in when executing a playbook on a Windows host:
+
+* `ansible_user` : User to connect as (prefer user@domain.tld over domain\user)
+* `ansible_password` : Password to use when connecting
+* `ansible_connection` : Connection method to use (`winrm` for windows)
+* `ansible_port` : Port to use for the connection (`5986` for WinRM)
+* `ansible_winrm_transport` : WinRM transport to use for the connection (suggested: `ntlm` or `credssp`, for more information consult the [pywinrm documentation](https://github.com/diyan/pywinrm/).
+* `ansible_winrm_server_cert_validation` : Should the SSL cert be validated. (suggested: `ignore`)
+
+
+Connecting via NTLM using a `user@domain.tld` style login:
+
+``` sh
+st2 run ansible.playbook playbook=/etc/ansible/playbooks/windows_playbook.yaml inventory_file="winvm01.domain.tld," extra_vars='["ansible_user=user@domain.tld","ansible_password=xxx","ansible_port=5986","ansible_connection=winrm","ansible_winrm_server_cert_validation=ignore","ansible_winrm_transport=ntlm"]'
+```
+
+Connecting via CredSSP using a `DOMAIN\user` style login (note the extra `\`):
+
+``` sh
+st2 run ansible.playbook playbook=/etc/ansible/playbooks/windows_playbook.yaml inventory_file="winvm01.domain.tld," extra_vars='["ansible_user=DOMAIN\\\\user","ansible_password=xxx","ansible_port=5986","ansible_connection=winrm","ansible_winrm_server_cert_validation=ignore","ansible_winrm_transport=credssp"]'
+```
+
 
 #### `ansible.vault` examples
 ```sh
