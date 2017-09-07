@@ -83,6 +83,53 @@ sample_task:
           key8: value8
 ```
 
+##### Structured input and Jinja
+Note that `value3`, in the previous example, was passed in as a variable in a Jinja expression.
+StackStorm normally casts variables to the types like int, array, and object.
+However, it can't do that for extra_vars because we cannot know ahead of time,
+for all Ansible playbooks, what schema and data types each entry will be. As such,
+within extra_vars, all Jinja expressions result in strings. To get around this, we've
+added some extra_vars parsing diretives: `!INT`, `!JSON`, and `!AST`.
+
+Use `!INT` if you are using a playbook that expects a value to be an integer:
+
+```yaml
+extra_vars:
+  port: '!INT{{ port_number }}'
+```
+
+Use `!JSON` when you have something that is already a JSON string or when it makes sense
+to convert it into a json string using Jinja filters:
+
+```yaml
+extra_vars:
+  special_config: '!JSON{{ config | tojson }}'
+```
+
+Use `!AST` (referring to python AST) when you have an object that you want to send straight over
+without any additional jinja filters:
+
+```yaml
+extra_vars:
+  data: '!AST{{ data }}'
+```
+
+These directives are supported recursively. So, you can embed directives in other directives.
+Consider this contrived example (though mostly you'll only hit embedding directives or objects
+if you're chaining workflows together to build up a data object):
+
+```yaml
+vars:
+  answer: "!INT{{ life_universe_everything }}"
+chain:
+  -
+    name: '...'
+    ref: 'ansible.playbook'
+    ...
+    extra_vars:
+      earth: '!JSON{"question": "unknown", "answer": {{ answer }} }'
+```
+
 ##### Structured output
 ```sh
 # get structured JSON output from a playbook
