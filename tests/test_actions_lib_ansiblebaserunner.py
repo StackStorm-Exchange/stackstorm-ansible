@@ -86,7 +86,7 @@ class TestActionsLibAnsibleBaseRunner(BasePackResourceTestCase):
         test_yaml = self.load_yaml('extra_vars_json.yaml')
         test = next(t for t in test_yaml if t['name'] == test_name)
         case = test['test']
-        expected = ['--extra-vars=\'{}\''.format(json.dumps(e)) for e in case]
+        expected = ['--extra-vars={}'.format(json.dumps(e)) for e in case]
         self.check_arg_parse(arg, case, expected)
 
     def test_parse_extra_vars_json_yaml_dict(self):
@@ -115,7 +115,7 @@ class TestActionsLibAnsibleBaseRunner(BasePackResourceTestCase):
         # this does not preserve the order exactly, but it shows that elements are correctly parsed
         expected = ['--extra-vars={}'.format(e)
                     for e in test['expected'] if isinstance(e, six.string_types)]
-        expected.extend(['--extra-vars=\'{}\''.format(json.dumps(e))
+        expected.extend(['--extra-vars={}'.format(json.dumps(e))
                          for e in test['expected'] if isinstance(e, dict)])
         self.check_arg_parse(arg, case, expected)
 

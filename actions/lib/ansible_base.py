@@ -64,7 +64,7 @@ class AnsibleBaseRunner(object):
 
                     # Add --extra-vars for each json object
                     elif t == 'json':
-                        self.args.append("--extra-vars='{0}'".format(json.dumps(v)))
+                        self.args.append("--extra-vars={0}".format(json.dumps(v)))
 
                     # Combine contiguous kwarg vars into a single space-separated --extra-vars kwarg
                     elif t == 'kwarg' and last != t:
