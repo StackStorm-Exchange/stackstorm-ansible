@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.5.3
+
+* Fixed a bug where JSON data was being passed incorrectly to `--extra-vars`. #19
+  Contributed by Nick Maludy (Encore Technologies)
+
 ## v0.5.2
 
 * Added pywinrm to requirements so connection to windows hosts is possible.
