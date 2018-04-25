@@ -145,6 +145,7 @@ custom.workflow:
     a:
       action: ansible.playbook
       input:
+        # 'ansible_play.yml' is part of the 'custom' pack
         playbook: "ansible_play.yml"
         inventory_file: "localhost,"
 ```
