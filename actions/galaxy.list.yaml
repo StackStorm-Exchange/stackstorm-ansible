@@ -15,9 +15,9 @@ parameters:
     type: boolean
     default: true
   cwd:
-    description: "Working directory where the command will be executed in (current pack dir)"
+    description: "Working directory where the command will be executed in (default: current pack/workflow dir)"
     type: string
-    default: "/opt/stackstorm/packs/{{ action_context.pack }}"
+    default: "/opt/stackstorm/packs/{% if action_context.parent is defined %}{{ action_context.parent.pack }}{% else %}{{ action_context.pack }}{% endif %}"
   timeout:
     description: "Action timeout in seconds. Action will get killed if it doesn't finish in timeout seconds. Lock as uneeded"
     type: integer
