@@ -15,8 +15,9 @@ parameters:
     type: boolean
     default: true
   cwd:
-    description: "Working directory where the command will be executed in"
+    description: "Working directory where the command will be executed in (current pack dir)"
     type: string
+    default: "/opt/stackstorm/packs/{{ action_context.pack }}"
   timeout:
     description: "Action timeout in seconds. Action will get killed if it doesn't finish in timeout seconds"
     type: integer
