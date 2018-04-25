@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.4
+* Set default `CWD` working dir to current pack path,
+  allowing easy use relative playbooks that are shipped with pack (#9)
+
 ## v0.5.3
 
 * Fixed a bug where JSON data was being passed incorrectly to `--extra-vars`. #19
