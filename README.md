@@ -54,7 +54,30 @@ st2 run ansible.playbook playbook=/etc/ansible/playbooks/nginx.yml
 st2 run ansible.playbook playbook=/etc/ansible/playbooks/nginx.yml limit='all[-1]'
 ```
 
-This is an example from a workflow that passes several several different
+#### `ansible.vault` examples
+```sh
+# encrypt /tmp/nginx.yml playbook with password containing in vault.txt
+st2 run ansible.vault.encrypt vault_password_file=vault.txt files=/tmp/nginx.yml
+
+# decrypt /etc/ansible/nginx.yml and /etc/ansible/db.yml files
+st2 run ansible.vault.decrypt cwd=/etc/ansible vault_password_file=vault.txt files='nginx.yml db.yml'
+
+# decrypt all files in /etc/ansible/playbooks directory
+st2 run ansible.vault.decrypt cwd=/etc/ansible vault_password_file=vault.txt files='playbooks/*'
+```
+
+#### `ansible.galaxy` examples
+```sh
+# download many roles
+st2 run ansible.galaxy.install roles='bennojoy.mysql kosssi.composer'
+
+# list rolex
+st2 run ansible.galaxy.list roles_path=/etc/ansible/roles
+```
+
+## Tips & Tricks
+#### Using Ansible `extra_vars` in StackStorm Workflow
+This is an example from a workflow that passes several different
 variables to the playbook as extra-vars:
 
 ```yaml
@@ -83,7 +106,7 @@ sample_task:
           key8: value8
 ```
 
-##### Structured output
+#### Structured output
 ```sh
 # get structured JSON output from a playbook
 st2 run ansible.playbook playbook=/etc/ansible/playbooks/nginx.yml env='{"ANSIBLE_STDOUT_CALLBACK":"json"}'
@@ -110,8 +133,24 @@ There is, however, a bug that breaks the JSON when the playbook execution fails 
 }
 ```
 
-##### Windows Hosts
+#### Relative path to playbooks within StackStorm workflows
+Current working directory (`CWD`) defaults to pack dir you're invoking Ansible pack actions from.
+That means if you're calling `ansible.playbook` from the `custom.workflow`, then you can use relative path to playbooks you'd ship with the `custom` pack (infra-as-code, yeah).
+```
+version: '2.0'
+custom.workflow:
+  description: A sample workflow that demonstrates how to use relative paths to playbooks shipped with pack.
+  type: direct
+  tasks:
+    a:
+      action: ansible.playbook
+      input:
+        playbook: "ansible_play.yml"
+        inventory_file: "localhost,"
+```
+This eliminates the need to specify absolute path to Ansible playbook file, located somewhere in `/opt/stackstorm/packs/...`.
 
+#### Windows Hosts
 Connecting to windows is possibe as of version `v0.5.2` of this pack.
 This is accomplished using ansible's [builtin windows support](http://docs.ansible.com/ansible/latest/intro_windows.html).
 
@@ -140,26 +179,4 @@ Connecting via CredSSP using a `DOMAIN\user` style login (note the extra `\`):
 
 ``` sh
 st2 run ansible.playbook playbook=/etc/ansible/playbooks/windows_playbook.yaml inventory_file="winvm01.domain.tld," extra_vars='["ansible_user=DOMAIN\\\\user","ansible_password=xxx","ansible_port=5986","ansible_connection=winrm","ansible_winrm_server_cert_validation=ignore","ansible_winrm_transport=credssp"]'
-```
-
-
-#### `ansible.vault` examples
-```sh
-# encrypt /tmp/nginx.yml playbook with password containing in vault.txt
-st2 run ansible.vault.encrypt vault_password_file=vault.txt files=/tmp/nginx.yml
-
-# decrypt /etc/ansible/nginx.yml and /etc/ansible/db.yml files
-st2 run ansible.vault.decrypt cwd=/etc/ansible vault_password_file=vault.txt files='nginx.yml db.yml'
-
-# decrypt all files in /etc/ansible/playbooks directory
-st2 run ansible.vault.decrypt cwd=/etc/ansible vault_password_file=vault.txt files='playbooks/*'
-```
-
-#### `ansible.galaxy` examples
-```sh
-# download many roles
-st2 run ansible.galaxy.install roles='bennojoy.mysql kosssi.composer'
-
-# list rolex
-st2 run ansible.galaxy.list roles_path=/etc/ansible/roles
 ```
