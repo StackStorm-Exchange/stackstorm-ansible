@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.4
+* Set default `CWD` working dir to current pack/workflow path,
+  allowing using relative path to playbooks shipped with custom pack (#9)
+
 ## v0.5.3
 
 * Fixed a bug where JSON data was being passed incorrectly to `--extra-vars`. #19

@@ -14,6 +14,10 @@ parameters:
     description: "Lock sudo, the behavior is controlled by ansible 'become_' options"
     type: boolean
     default: true
+  cwd:
+    description: "Working directory where the command will be executed in (default: current pack/workflow dir)"
+    type: string
+    default: "/opt/stackstorm/packs/{% if action_context.parent %}{{ action_context.parent.pack }}{% else %}{{ action_context.pack }}{% endif %}"
   timeout:
     description: "Action timeout in seconds. Action will get killed if it doesn't finish in timeout seconds. Lock as uneeded"
     type: integer
@@ -34,9 +38,6 @@ parameters:
     description: "Vault file with password"
     type: string
     required: true
-  cwd:
-    description: "Working directory where the command will be executed in"
-    type: string
   debug:
     description: "Enable debug mode"
     type: boolean
