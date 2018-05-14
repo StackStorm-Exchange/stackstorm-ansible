@@ -1,0 +1,73 @@
+version: 2
+
+jobs:
+  build_and_test:
+    docker:
+      - image: circleci/python:2.7
+      - image: rabbitmq:3
+      - image: mongo:3.4
+
+    working_directory: ~/repo
+
+    environment:
+      VIRTUALENV_DIR: "~/virtualenv"
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "requirements.txt" }}
+      - run:
+          name: Download dependencies
+          command: |
+            git clone -b master git@github.com:stackstorm-exchange/ci.git ~/ci
+            ~/ci/.circle/dependencies
+      - run:
+          name: Run tests
+          command: ~/ci/.circle/test
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "requirements.txt" }}
+          paths:
+            - ~/.cache/pip
+            - ~/.apt-cache
+      - persist_to_workspace:
+          root: /
+          paths:
+            - home/circleci/ci
+            - home/circleci/virtualenv
+            - tmp/st2
+            - home/circleci/repo
+            - home/circleci/.gitconfig
+
+  deploy:
+    docker:
+      - image: circleci/python:2.7
+
+    working_directory: ~/repo
+
+    environment:
+      VIRTUALENV_DIR: "~/virtualenv"
+
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "requirements.txt" }}
+      - attach_workspace:
+          at: /
+      - run:
+          name: Install dependencies
+          command: sudo apt -y install gmic optipng
+      - run:
+          name: Update exchange.stackstorm.org
+          command:  ~/ci/.circle/deployment
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - build_and_test
+      - deploy:
+          requires:
+            - build_and_test
+          filters:
+            branches:
+              only: master
