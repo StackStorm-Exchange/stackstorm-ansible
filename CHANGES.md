@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.5
+
+* Fix Jinja rendering issue for Ansible vault actions (#28)
+
 ## v0.5.4
 * Set default `CWD` working dir to current pack/workflow path,
   allowing using relative path to playbooks shipped with custom pack (#9)
