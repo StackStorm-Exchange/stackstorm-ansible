@@ -60,12 +60,22 @@ jobs:
           key: v1-dependency-cache-py36-{{ checksum "requirements.txt" }}
       - run:
           name: Download dependencies
+          # NOTE: We don't want to use default "-e" option because this means
+          # step will fail immediately on one of the commands failures and we
+          # can't intercept the error and cause non-fatal exit in case pack
+          # doesn't declare support for Python 3
+          shell: /bin/bash
           command: |
             git clone -b master git://github.com/stackstorm-exchange/ci.git ~/ci
-            ~/ci/.circle/dependencies
+            ~/ci/.circle/dependencies ; ~/ci/.circle/exit_on_py3_checks $?
       - run:
           name: Run tests (Python 3.6)
-          command: ~/ci/.circle/test || exit 0
+          # NOTE: We don't want to use default "-e" option because this means
+          # step will fail immediately on one of the commands failures and we
+          # can't intercept the error and cause non-fatal exit in case pack
+          # doesn't declare support for Python 3
+          shell: /bin/bash
+          command: ~/ci/.circle/test ; ~/ci/.circle/exit_on_py3_checks $?
       - save_cache:
           key: v1-dependency-cache-py36-{{ checksum "requirements.txt" }}
           paths:
