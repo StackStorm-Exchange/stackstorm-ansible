@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/opt/stackstorm/st2/bin/python
 
 import sys
 from lib.ansible_base import AnsibleBaseRunner
