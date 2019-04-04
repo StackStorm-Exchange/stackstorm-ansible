@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.5.6
+*  Fix Ansible pack shebang to utilize st2 python virtualenv (#33)
+
 ## v0.5.5
 
 * Fix Jinja rendering issue for Ansible vault actions (#28)
