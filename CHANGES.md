@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.5.8
+*  Minor linting fix
+
 ## v0.5.7
 *  add `netaddr` to requirements. This package is required for common ansible filters such as ipaddr() and ipmath(). See https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters_ipaddr.html for more details
 
