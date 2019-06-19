@@ -103,7 +103,7 @@ class AnsibleBaseRunner(object):
         Terminate with child's exit code.
         """
         exit_code = subprocess.call(self.cmd, env=os.environ.copy())
-        if exit_code is not 0:
+        if exit_code != 0:
             sys.stderr.write('Executed command "%s"\n' % ' '.join(self.cmd))
         sys.exit(exit_code)
 
