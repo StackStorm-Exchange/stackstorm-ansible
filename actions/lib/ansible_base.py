@@ -1,10 +1,11 @@
 import os
 import sys
 import subprocess
-import shell
 import ast
 import json
 import six
+
+from . import shell
 
 __all__ = [
     'AnsibleBaseRunner'
