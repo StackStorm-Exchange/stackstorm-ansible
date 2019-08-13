@@ -1,5 +1,8 @@
 # Changelog
 
+## v0.5.9
+* Fix pack compatibility under python 3 when unsupported implicit relative import was used (#41)
+
 ## v0.5.8
 *  Minor linting fix
 
