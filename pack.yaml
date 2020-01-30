@@ -9,3 +9,6 @@ keywords:
 version : 0.5.9
 author : StackStorm, Inc.
 email : info@stackstorm.com
+python_versions:
+  - "2"
+  - "3"
