@@ -120,6 +120,7 @@ workflows:
       - deploy:
           requires:
             - build_and_test_python27
+            - build_and_test_python36
           filters:
             branches:
               only: master
