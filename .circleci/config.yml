@@ -105,7 +105,9 @@ jobs:
           at: /
       - run:
           name: Install dependencies
-          command: sudo apt -y install gmic optipng
+          command: |
+            sudo apt-get update
+            sudo apt -y install gmic optipng
       - run:
           name: Update exchange.stackstorm.org
           command:  ~/ci/.circle/deployment
