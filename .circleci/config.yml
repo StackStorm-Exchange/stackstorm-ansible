@@ -14,6 +14,8 @@ jobs:
       # Don't install various StackStorm dependencies which are already
       # installed by CI again in the various check scripts
       ST2_INSTALL_DEPS: "0"
+      # 3.3 is the last version to support python27
+      ST2_BRANCH: "v3.3"
 
     steps:
       - checkout
