@@ -75,11 +75,8 @@ jobs:
             sudo apt-get update
             sudo apt -y install gmic optipng
       - run:
-          # NOTE: We try to retry the script up to 5 times if it fails. The command could fail due
-          # to the race (e.g. we try to push changes to index, but index has been updated by some
-          # other pack in the mean time)
           name: Update exchange.stackstorm.org
-          command: ~/ci/.circle/retry_on_failure.sh ~/ci/.circle/deployment
+          command: ~/ci/.circle/deployment
 
 workflows:
   version: 2
