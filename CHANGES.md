@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0
+
+* Drop Python 2.7 support
+
 ## v0.5.9
 * Fix pack compatibility under python 3 when unsupported implicit relative import was used (#41)
 
