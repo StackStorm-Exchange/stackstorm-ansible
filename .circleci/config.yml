@@ -74,6 +74,7 @@ jobs:
           command: |
             sudo apt-get update
             sudo apt -y install gmic optipng
+            ~/ci/.circle/install_gh
       - run:
           name: Update exchange.stackstorm.org
           command: ~/ci/.circle/deployment
