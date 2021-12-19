@@ -1,0 +1,17 @@
+name: CI
+
+on:
+  pull_request:
+  schedule:
+    # NOTE: We run this weekly at 1 am UTC on every Saturday
+    - cron:  '0 1 * * 6'
+
+jobs:
+  # This is mirrored in the release workflow.
+  build_and_test:
+    name: 'Build and Test'
+    uses: StackStorm-Exchange/ci/.github/workflows/pack-build_and_test.yaml@master
+    with:
+      enable-common-libs: true
+      #apt-cache-version: v0
+      #py-cache-version: v0
