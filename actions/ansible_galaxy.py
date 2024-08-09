@@ -19,6 +19,7 @@ class AnsibleGalaxyRunner(AnsibleBaseRunner):
         '--ignore_errors': '--ignore-errors',
         '--no_deps': '--no-deps',
         '--role_file': '--role-file',
+        '--collection_file': '-r',
     }
 
     def __init__(self, *args, **kwargs):
