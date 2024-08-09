@@ -22,21 +22,29 @@ parameters:
     description: "Action timeout in seconds. Action will get killed if it doesn't finish in timeout seconds"
     type: integer
     default: 300
+  type:
+    description: "Install role(s) or collection(s)?"
+    type: string
+    enum:
+      - collection
+      - role
+    position: 0
+    default: role
   action:
     description: "Action to use"
     type: string
-    position: 0
+    position: 1
     default: install
     immutable: true
   roles:
     description: "Role(s) to install (separated by space)"
     type: string
-    position: 1
+    position: 2
     default: ""
   collections:
     description: "Collection(s) to install (separated by space)"
     type: string
-    position: 1
+    position: 3
     default: ""
   ignore_errors:
     description: "Ignore errors and continue with the next specified role [-i]"
