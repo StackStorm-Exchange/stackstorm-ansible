@@ -32,7 +32,7 @@ class AnsibleBaseRunner(object):
     def _parse_args(self):
         for i, arg in enumerate(self.args):
             if '--' in arg:
-                self.args.append(kv_param) # move to the end
+                self.args.append(self.args[i]) # move to the end
                 del self.args[i] # delete original arg
             elif arg == "":
                 del self.args[i] # delete the arg as it's empty
