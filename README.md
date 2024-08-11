@@ -75,7 +75,7 @@ st2 run ansible.galaxy.install type=role roles='bennojoy.mysql kosssi.composer'
 st2 run ansible.galaxy.list type=role roles_path=/etc/ansible/roles
 
 # download many collections
-st2 run ansible.galaxy.install type=role collections='microsoft.ad ansible.rabittmq'
+st2 run ansible.galaxy.install type=collection collections='microsoft.ad ansible.rabittmq'
 
 # list collections
 st2 run ansible.galaxy.list type=collection
