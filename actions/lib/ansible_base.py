@@ -25,8 +25,17 @@ class AnsibleBaseRunner(object):
         :type args: ``list``
         """
         self.args = args[1:]
+        self._parse_args()
         self._parse_extra_vars()  # handle multiple entries in --extra_vars arg
         self._prepend_venv_path()
+
+    def _parse_args(self):
+        for i, arg in enumerate(self.args):
+            if '--' in arg:
+                self.args.append(kv_param) # move to the end
+                del self.args[i] # delete original arg
+            elif arg == "":
+                del self.args[i] # delete the arg as it's empty
 
     def _parse_extra_vars(self):
         """
