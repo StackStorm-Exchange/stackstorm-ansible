@@ -20,6 +20,7 @@ class AnsibleGalaxyRunner(AnsibleBaseRunner):
         '--no_deps': '--no-deps',
         '--role_file': '--role-file',
         '--collection_file': '-r',
+        '--collection_path': '--collection-path',
     }
 
     def __init__(self, *args, **kwargs):
