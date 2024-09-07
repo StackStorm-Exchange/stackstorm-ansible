@@ -24,7 +24,12 @@ class AnsibleGalaxyRunner(AnsibleBaseRunner):
     }
 
     def __init__(self, *args, **kwargs):
-        super(AnsibleGalaxyRunner, self).__init__(*args, **kwargs)
+        tmpArgs = []
+        for arg in args[0]:
+            for item in arg.split(' '):
+                if item != "":
+                    tmpArgs.append(item)
+        super(AnsibleGalaxyRunner, self).__init__(tmpArgs, **kwargs)
 
 
 if __name__ == '__main__':
