@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+
+* Support st2 v3.9 release
+* Replace self.assertItemsEqual with self.assertCountEqual
+
 ## 1.0.0
 
 * Drop Python 2.7 support

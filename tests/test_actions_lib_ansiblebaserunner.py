@@ -41,7 +41,7 @@ class TestActionsLibAnsibleBaseRunner(BasePackResourceTestCase):
     def check_arg_parse(self, arg_name, test_case, expected_ansible_args):
         args = ['ansible_base.py', self.generate_arg(arg_name, test_case)]
         ansible_base_runner = AnsibleBaseRunner(args)
-        self.assertItemsEqual(expected_ansible_args, ansible_base_runner.args)
+        self.assertCountEqual(expected_ansible_args, ansible_base_runner.args)
 
     def test_parse_extra_vars_key_value(self):
         arg = '--extra_vars'
