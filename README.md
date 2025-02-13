@@ -21,7 +21,7 @@ sudo yum install gcc krb5-devel
 * `playbook` - Action to run [Ansible Playbook](http://docs.ansible.com/playbooks.html) (`ansible-playbook` executable).
 * `vault.encrypt` - Encrypt ansible data files (playbooks, vars, roles, etc) with password (`ansible-vault` executable).
 * `vault.decrypt` - Decrypt ansible data files (playbooks, vars, roles, etc) with password (`ansible-vault` executable).
-* `galaxy.install` - Install role from [Ansible Galaxy](http://docs.ansible.com/galaxy.html) - hub of [community developed roles](https://galaxy.ansible.com/) (`ansible-galaxy`).
+* `galaxy.install` - Install role or collection from [Ansible Galaxy](http://docs.ansible.com/galaxy.html) - hub of [community developed roles](https://galaxy.ansible.com/) (`ansible-galaxy`).
 * `galaxy.list` - List installed from Ansible Galaxy roles (`ansible-galaxy` executable).
 * `galaxy.remove` - Remove the role installed from Ansible Galaxy (`ansible-galaxy` executable).
 
@@ -69,10 +69,16 @@ st2 run ansible.vault.decrypt cwd=/etc/ansible vault_password_file=vault.txt fil
 #### `ansible.galaxy` examples
 ```sh
 # download many roles
-st2 run ansible.galaxy.install roles='bennojoy.mysql kosssi.composer'
+st2 run ansible.galaxy.install type=role roles='bennojoy.mysql kosssi.composer'
 
-# list rolex
-st2 run ansible.galaxy.list roles_path=/etc/ansible/roles
+# list roles
+st2 run ansible.galaxy.list type=role roles_path=/etc/ansible/roles
+
+# download many collections
+st2 run ansible.galaxy.install type=collection collections='microsoft.ad ansible.rabittmq'
+
+# list collections
+st2 run ansible.galaxy.list type=collection
 ```
 
 ## Tips & Tricks

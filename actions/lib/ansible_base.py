@@ -25,8 +25,21 @@ class AnsibleBaseRunner(object):
         :type args: ``list``
         """
         self.args = args[1:]
+        self._parse_args() # move args starting with -- to the end of the command line
         self._parse_extra_vars()  # handle multiple entries in --extra_vars arg
         self._prepend_venv_path()
+
+    def _parse_args(self):
+        """
+        This method moves the args starting with -- to the end of the command line
+        It also deletes any empty args
+        """
+        for i, arg in enumerate(self.args):
+            if arg.startswith("--"):
+                self.args.append(self.args[i]) # move to the end
+                del self.args[i] # delete original arg
+            elif arg == "":
+                del self.args[i] # delete the arg as it's empty
 
     def _parse_extra_vars(self):
         """
